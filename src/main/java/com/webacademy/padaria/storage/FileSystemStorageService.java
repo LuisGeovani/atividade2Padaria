@@ -2,15 +2,18 @@ package com.webacademy.padaria.storage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.web.multipart.MultipartFile;
 
-public class FileSystemStorageService {
+public class FileSystemStorageService implements IStorageService {
     
     private final Path publicRootLocation;
     private final Path privateRootLocation;
@@ -73,6 +76,21 @@ public class FileSystemStorageService {
             Files.deleteIfExists(file);
         } catch(IOException e) {
             throw new RuntimeException("Falha ao excluir arquivo: " + fileName, e);
+        }
+    }
+
+    @Override
+    public Resource loadAsResource(String fileName, boolean isPublic) {
+        try {
+            Path file = load(fileName, isPublic);
+            Resource resource = new UrlResource(file.toUri());
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Não foi possível ler o arquivo: " + fileName);
+            }
+        } catch(MalformedURLException e) {
+            throw new RuntimeException("Não foi possível ler o arquivo: " + fileName);
         }
     }
 }
