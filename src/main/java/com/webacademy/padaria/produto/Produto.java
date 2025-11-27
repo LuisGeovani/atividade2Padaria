@@ -1,10 +1,15 @@
 package com.webacademy.padaria.produto;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.webacademy.padaria.categoria.Categoria;
+import com.webacademy.padaria.imagem.Imagem;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,6 +40,13 @@ public class Produto {
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
+
+    @ElementCollection
+    @CollectionTable(
+        name = "produto_imagens",
+        joinColumns = @JoinColumn(name = "produto_id")
+    )
+    private Set<Imagem> imagens = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -84,5 +96,13 @@ public class Produto {
         this.categoria = categoria;
     }
 
-    
+    public Set<Imagem> getImagens() {
+        return imagens;
+    }
+
+    public void setImagens(Set<Imagem> imagens) {
+        this.imagens = imagens;
+    }
+
+
 }

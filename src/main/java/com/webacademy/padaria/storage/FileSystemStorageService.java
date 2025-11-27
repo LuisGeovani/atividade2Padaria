@@ -11,16 +11,20 @@ import java.util.UUID;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.webacademy.padaria.config.StorageProperties;
+
+@Service
 public class FileSystemStorageService implements IStorageService {
     
     private final Path publicRootLocation;
     private final Path privateRootLocation;
 
-    public FileSystemStorageService(Path publicRootLocation, Path privateRootLocation) {
-        this.publicRootLocation = publicRootLocation;
-        this.privateRootLocation = privateRootLocation;
+    public FileSystemStorageService(StorageProperties storageProperties) {
+        this.publicRootLocation = Paths.get(storageProperties.getLocationPublic());
+        this.privateRootLocation = Paths.get(storageProperties.getLocationPrivate());
     }
 
     public void init() {

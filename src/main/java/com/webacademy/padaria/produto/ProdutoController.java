@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.webacademy.padaria.interfaces.crudControllerInterfaces.IDeleteController;
 import com.webacademy.padaria.interfaces.crudControllerInterfaces.IGetController;
@@ -58,6 +59,19 @@ public class ProdutoController implements IGetController<Produto>, ISaveControll
         return ResponseEntity.ok(produtos);
     }
 
+    @PostMapping("/{idProduto}/imagem")
+    public ResponseEntity<Produto> addImagens(@PathVariable Long idProduto,
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam("publica") boolean publica) {
+        var produto = service.addImagens(idProduto, files, publica);
+        return ResponseEntity.ok(produto);
+    }
 
+    @DeleteMapping("/{idProduto}/imagem")
+    public ResponseEntity<Void> removerImagem(@PathVariable Long idProduto,
+            @RequestParam("nomeArquivo") String nomeArquivo) {
+        service.excluirImagem(idProduto, nomeArquivo);
+        return ResponseEntity.ok().body(null);
+    }
 
 }
