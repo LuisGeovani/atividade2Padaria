@@ -1,7 +1,12 @@
 package com.webacademy.padaria.usuario;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.webacademy.padaria.endereco.Endereco;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,6 +14,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -36,6 +42,10 @@ public class Usuario {
     @Column(nullable = false)
     private LocalDate dataCadastro;
     
+    @OneToMany(mappedBy="usuario", cascade= CascadeType.ALL)
+    private List<Endereco> enderecos = new ArrayList<>();
+
+
     public Long getId() {
         return id;
     }
@@ -90,6 +100,14 @@ public class Usuario {
 
     public void setTipoUsuario(ETipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
     }
 
 
